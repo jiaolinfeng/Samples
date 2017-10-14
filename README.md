@@ -1,2 +1,2 @@
 # samples
-sample programs for learning and practice
+sample programs for learning and practicing
