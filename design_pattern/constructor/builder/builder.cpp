@@ -6,12 +6,18 @@
  * @date 2017-10-24
  */
 
+#include <assert.h>
 #include <iostream>
 #include <string>
 
 class Hero
 {
 public:
+    Hero()
+    {
+
+    }
+
     void show()
     {
         std::cout << "I'm a hero with "
@@ -30,52 +36,129 @@ public:
 class HeroBuilder
 {
 public:
-    HeroBuilder()
+    HeroBuilder(Hero *hero) : hero_(hero)
     {
-        hero_ = new Hero;
     }
 
-    HeroBuilder* setBody(const std::string& body)
+    virtual ~HeroBuilder()
     {
-        std::cout << "set hero body " << body  << std::endl;
-        hero_->body = body;
-        return this;
+
     }
 
-    HeroBuilder* setArmour(const std::string&  armour)
-    {
-        std::cout << "set hero armour " << armour << std::endl;
-        hero_->armour = armour;
-        return this;
-    }
+    virtual HeroBuilder* buildBody() = 0;
 
-    HeroBuilder* setWeapon(const std::string&  weapon)
-    {
-        std::cout << "set hero weapon " << weapon << std::endl;
-        hero_->weapon = weapon;
-        return this;
-    }
+    virtual HeroBuilder* buildArmour() = 0;
+
+    virtual HeroBuilder* buildWeapon() = 0;
 
     Hero* build()
     {
+        buildBody();
+        buildArmour();
+        buildWeapon();
         return hero_;
+    }
+protected:
+    void setBody(const std::string body)
+    {
+        hero_->body = body;
+    }
+
+    void setArmour(const std::string armour)
+    {
+        hero_->armour = armour;
+    }
+
+    void setWeapon(const std::string weapon)
+    {
+        hero_->weapon = weapon;
     }
 private:
     Hero *hero_;
 };
 
+class WeakHeroBuilder : public HeroBuilder
+{
+public:
+    WeakHeroBuilder(Hero *hero) : HeroBuilder(hero)
+    {
+
+    }
+
+    virtual ~WeakHeroBuilder()
+    {
+
+    }
+
+    virtual HeroBuilder* buildBody()
+    {
+        setBody("thin");
+        return this;
+    }
+
+    virtual HeroBuilder* buildArmour()
+    {
+        setArmour("poor");
+        return this;
+    }
+
+    virtual HeroBuilder* buildWeapon()
+    {
+        setWeapon("rusty");
+        return this;
+    }
+
+};
+
+class StrongHeroBuilder : public HeroBuilder
+{
+public:
+    StrongHeroBuilder(Hero *hero) : HeroBuilder(hero)
+    {
+
+    }
+
+    virtual ~StrongHeroBuilder()
+    {
+    }
+
+    virtual HeroBuilder* buildBody()
+    {
+        setBody("strong");
+        return this;
+    }
+
+    virtual HeroBuilder* buildArmour()
+    {
+        setArmour("solid");
+        return this;
+    }
+
+    virtual HeroBuilder* buildWeapon()
+    {
+        setWeapon("sharp");
+        return this;
+    }
+};
+
 int main()
 {
-    HeroBuilder *builder = new HeroBuilder;
-    Hero *hero = builder->setBody("strong")
-                        ->setArmour("solid")
-                        ->setWeapon("sharp")
-                        ->build();
-    if (hero)
-    {
-        hero->show();
-        delete hero;
-        hero = nullptr;
-    }
+    Hero *hero = new Hero;
+    assert(hero != nullptr);
+    HeroBuilder *builder = new(std::nothrow) WeakHeroBuilder(hero);
+    assert(builder != nullptr);
+    hero = builder->build();
+    hero->show();
+    delete builder;
+    builder = nullptr;
+
+    builder = new(std::nothrow) StrongHeroBuilder(hero);
+    hero = builder->build();
+    hero->show();
+    delete builder;
+    builder = nullptr;
+
+    delete hero;
+    hero = nullptr;
     return 0;
 }
