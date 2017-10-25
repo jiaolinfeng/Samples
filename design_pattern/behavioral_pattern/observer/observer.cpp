@@ -80,29 +80,26 @@ class Enemy : public Observer
 public:
     virtual void update() override
     {
-        std::cout << "An enemy try kill him!" << std::endl;
+        std::cout << "An enemy try to kill him!" << std::endl;
     }
 };
 
 int main()
 {
     // observable
-    std::unique_ptr<Observable> p_blood_less =
-        std::unique_ptr<Observable>(new(std::nothrow) BloodLess);
+    std::shared_ptr<Observable> p_blood_less(new(std::nothrow) BloodLess);
     if (!p_blood_less.get())
     {
         return -1;
     }
     // observer1
-    std::unique_ptr<Friend> p_friend =
-        std::unique_ptr<Friend>(new(std::nothrow) Friend);
+    std::shared_ptr<Friend> p_friend(new(std::nothrow) Friend);
     if (!p_friend.get())
     {
         return -1;
     }
     // observer2
-    std::unique_ptr<Enemy> p_enemy =
-        std::unique_ptr<Enemy>(new(std::nothrow) Enemy);
+    std::shared_ptr<Enemy> p_enemy(new(std::nothrow) Enemy);
     if (!p_enemy.get())
     {
         return -1;

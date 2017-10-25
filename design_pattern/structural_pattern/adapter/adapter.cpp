@@ -68,19 +68,15 @@ private:
 
 int main()
 {
-    std::unique_ptr<Hero> p_hero =
-        std::unique_ptr<Hero>(new(std::nothrow) Hero);
+    std::shared_ptr<Hero> p_hero(new(std::nothrow) Hero);
     assert(p_hero.get());
-    std::unique_ptr<Armor> p_armor =
-        std::unique_ptr<Armor>(new(std::nothrow) Armor);
+    std::shared_ptr<Armor> p_armor(new(std::nothrow) Armor);
     assert(p_armor.get());
     p_hero->wear(p_armor.get());
 
-    std::unique_ptr<MagicArmor> p_magic_armor =
-        std::unique_ptr<MagicArmor>(new(std::nothrow) MagicArmor);
+    std::shared_ptr<MagicArmor> p_magic_armor(new(std::nothrow) MagicArmor);
     assert(p_magic_armor.get());
-    std::unique_ptr<MagicArmorAdapter> p_magic_armor_adapter =
-        std::unique_ptr<MagicArmorAdapter>(new(std::nothrow)
+    std::shared_ptr<MagicArmorAdapter> p_magic_armor_adapter(new(std::nothrow)
         MagicArmorAdapter(p_magic_armor.get()));
     assert(p_magic_armor_adapter.get());
     p_hero->wear(p_magic_armor_adapter.get());
