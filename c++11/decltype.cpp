@@ -22,7 +22,7 @@ decltype(auto) authAndAccess(Container& c, Index i)
 
 template<typename Container, typename Index>
 auto authAndAccess(Container&& c, Index i)
--> decltype(std::forward<Container>(c)[i])
+    -> decltype(std::forward<Container>(c)[i])
 {
     return std::forward<Container>(c)[i];
 }
