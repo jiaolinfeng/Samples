@@ -63,7 +63,6 @@ void Observer::unobserver(Observable *observable)
 
 class BloodLess : public Observable
 {
-
 };
 
 class Friend : public Observer
