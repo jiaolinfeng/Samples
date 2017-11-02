@@ -76,13 +76,17 @@ int main()
     int x = 1;
     // case one
     dog(x); // T => int, ParamType => int&
+    int&& rrx = std::move(x);
     cat(x); // T => int, ParamType => const int&
+    cat(rrx); // T => int, ParamType => const int&
+    cat(std::move(x)); // T => int, ParamType => const int&
     // dog(1); // error: T => int, 1 cannot passed to int&
     cat(1); // T => int, ParamType => const int&
 
     // case two
     pig(x); // T => int&, ParamType => int&
     int& y = x;
+    pig(rrx); // T => int&, ParamType => int&
     const int zz = 10;
     pig(y); // T => int&, ParamType => int&
     pig(std::move(x)); // T => int,  ParamType => int&&
