@@ -13,19 +13,21 @@
 int main()
 {
     int val = 0;
-    std::atomic<bool> running; //bool running;
+    //bool running;
+    volatile bool running;
+    //std::atomic<bool> running;
     running = true;
 
     std::thread t1([&running, &val] {
-        val = 10;
-        running = false;
-    });
-
-    std::thread t2([&running, &val] {
         while (running)
         {
         }
         std::cout << val << '\n';
+    });
+
+    std::thread t2([&running, &val] {
+        val = 10;
+        running = false;
     });
 
     t1.join();

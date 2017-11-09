@@ -32,7 +32,5 @@ int main()
     f = realAsync([res](){ return res - 10;});
     std::cout << f.get() << '\n';
 
-
-
     return 0;
 }
