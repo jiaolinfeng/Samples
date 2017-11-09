@@ -3,8 +3,11 @@
 #include <functional>
 #include <memory>
 
-template <typename... Ts>
-class Signal
+template <typename F>
+class Signal;
+
+template <typename R, typename... Ts>
+class Signal<R(Ts...)>
 {
 public:
     using Func = std::function<void(Ts...)>;
@@ -26,17 +29,21 @@ private:
     std::vector<Func> funcs_;
 };
 
-void test(int i)
+void test(int i, int j)
 {
-    std::cout << i << '\n';
+    std::cout << i << ' ' << j << '\n';
+}
+
+void test_void()
+{
+    std::cout << "test void" << '\n';
 }
 
 int main()
 {
-    using Test = Signal<int>;
+    using Test = Signal<void(int, int)>;
     std::unique_ptr<Test> pb(new Test());
     pb->connect(test);
-    pb->call(10);
-    pb->call(20);
+    pb->call(10, 20);
     return 0;
 }
